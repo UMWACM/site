@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html"
+<link rel-"import" href="../bower_components/"
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-post">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+
+      <iron-ajax
+      auto
+      url="{{url}}"
+      handle-as="json"
+      last-response="{{response}}"></iron-ajax>
+
+      <template is="dom-repeat" items="{{response}}">
+        <paper-card image="{{item.head_img}}">
+          <paper-toolbar>
+            <div slot="top" class="title">{{item.title}}</div>
+          </paper-toolbar>
+          <marked-element markdown="{{item.content}}">
+            <div slot="markdown-html"></div>
+          </marked-element>
+        </paper-card>
+      </template>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-post',
+      properties: {
+        address: {
+          value: 'httpbin.org',
+          notify: true
+        }
+        type: {
+          value: 'Type',
+          notify: true
+        },
+        id: {
+          value: 'ID',
+          notify: true
+        },
+        url: {
+          computed: 'computeUrl(address, type, id)'
+        }/*,
+        options: {
+          computed: 'computeOptions(state, page)'
+        }*/
+      },
+      computeUrl: function(address, type, id) {
+        return ['https://', address, '/posts', type, id].join('/');
+      },
+      /*computeOptions: function(state, page) {
+        return {state: state, page: page};
+      }*/
+    });
+  </script>
+</dom-module>
